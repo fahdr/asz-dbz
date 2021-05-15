@@ -18,7 +18,8 @@ locals {
   ]
   worker_groups_launch_template = [
     {
-      instance_type           = "t2.micro"
+      instance_type           = "t2.small"
+      root_volume_size        = "10"
       override_instance_types = var.asg_instance_types
       asg_desired_capacity    = var.autoscaling_minimum_size_by_az * length(data.aws_availability_zones.available_azs.zone_ids)
       asg_min_size            = var.autoscaling_minimum_size_by_az * length(data.aws_availability_zones.available_azs.zone_ids)
@@ -37,7 +38,7 @@ module "eks-cluster" {
   source           = "terraform-aws-modules/eks/aws"
   version          = "15.2.0"
   cluster_name     = "${var.cluster_name}"
-  cluster_version  = "1.16"
+  cluster_version  = "1.19"
   write_kubeconfig = false
   wait_for_cluster_cmd          = "until curl -k -s $ENDPOINT/healthz >/dev/null; do sleep 4; done"
 

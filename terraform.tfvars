@@ -9,7 +9,7 @@ zone_offset             = 8
 #eks vars
 admin_users                              = ["testuser"]
 developer_users                          = ["melissa-oliver", "lex-oneil"]
-asg_instance_types                       = ["t2.micro", "t2.nano"]
+asg_instance_types                       = ["t2.small", "t2.micro", "t2.nano"]
 autoscaling_minimum_size_by_az           = 1
 autoscaling_maximum_size_by_az           = 10
 autoscaling_average_cpu                  = 30
