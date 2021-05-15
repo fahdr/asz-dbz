@@ -1,6 +1,9 @@
 # get (externally configured) DNS Zone
 resource "aws_route53_zone" "base_domain" {
   name = var.dns_base_domain
+  tags = {
+    sre_candidate = "fahdrahman"
+  }
 }
 
 
@@ -12,7 +15,7 @@ resource "aws_acm_certificate" "eks_domain_cert" {
 
   tags = {
     Name            = "${var.dns_base_domain}"
-    iac_environment = var.iac_environment_tag
+    sre_candidate = "fahdrahman"
   }
 }
 #resource "aws_route53_record" "eks_domain_cert_validation_dns" {

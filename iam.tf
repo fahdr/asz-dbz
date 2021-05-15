@@ -1,6 +1,7 @@
 resource "kubernetes_cluster_role" "iam_roles_developers" {
   metadata {
     name = "${var.name_prefix}-developers"
+    
   }
 
   rule {
