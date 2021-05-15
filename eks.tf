@@ -20,10 +20,10 @@ locals {
     {
       instance_type           = "t2.micro"
       override_instance_types = var.asg_instance_types
-      asg_desired_capacity    = var.autoscaling_minimum_size_by_az # * length(data.aws_availability_zones.available_azs.zone_ids)
-      asg_min_size            = var.autoscaling_minimum_size_by_az #* length(data.aws_availability_zones.available_azs.zone_ids)
-      asg_max_size            = var.autoscaling_maximum_size_by_az #* length(data.aws_availability_zones.available_azs.zone_ids)
-      on_demand_base_capacity = var.autoscaling_minimum_size_by_az #* length(data.aws_availability_zones.available_azs.zone_ids)
+      asg_desired_capacity    = var.autoscaling_minimum_size_by_az * length(data.aws_availability_zones.available_azs.zone_ids)
+      asg_min_size            = var.autoscaling_minimum_size_by_az * length(data.aws_availability_zones.available_azs.zone_ids)
+      asg_max_size            = var.autoscaling_maximum_size_by_az * length(data.aws_availability_zones.available_azs.zone_ids)
+      on_demand_base_capacity = var.autoscaling_minimum_size_by_az * length(data.aws_availability_zones.available_azs.zone_ids)
       on_demand_percentage_above_base_capacity = 25
       spot_instance_pools                      = 3
       kubelet_extra_args = "--node-labels=node.kubernetes.io/lifecycle=`curl -s http://169.254.169.254/latest/meta-data/instance-life-cycle`"
