@@ -30,6 +30,8 @@ ingress_gateway_annotations = {
   "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"               = "https",
   "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-connection-idle-timeout" = "60",
   "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"                    = "elb"
+  "prometheus.create" = "true"
+  "prometheus.port" = "9113:"
 }
 
 #subdomain vars
