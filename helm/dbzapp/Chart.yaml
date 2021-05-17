@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: dbzapp
+description: Minimalist server that returns error codes
+type: application
+version: 0.1.0
+appVersion: 0.1.0

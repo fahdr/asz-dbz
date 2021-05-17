@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  replicas: {{ .Values.container.replicas }}
+  template:
+    metadata:
+      annotations:
+       prometheus.io/scrape: "true"
+       prometheus.io/port: "4040"
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.container.image }}:{{ .Values.container.tag }}
+        imagePullPolicy: "Always"
+        resources:
+          limits:
+            cpu: 500m
+            memory: "300Mi"
+          requests:
+            cpu: 100m
+            memory: "200Mi"
+        ports:
+        - containerPort: {{ .Values.container.port }}
+      - name: exporter
+        image: fahdr/nginx-log:latest
+        resources:
+          limits:
+            cpu: 500m
+            memory: "300Mi"
+          requests:
+            cpu: 100m
+            memory: "100Mi"
+        args: ["-config-file", "/etc/prometheus-nginxlog-exporter/config.hcl"]
+        volumeMounts:
+        - name: exporter-config
+          mountPath: /etc/prometheus-nginxlog-exporter
+      volumes:
+      - name: exporter-config
+        configMap:
+           name: exporter-config

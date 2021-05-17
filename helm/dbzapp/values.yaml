@@ -1,0 +1,19 @@
+---
+container:
+  image: "fahdr/dbz-app"
+  tag: "latest"
+  port: 80
+  logport: 4040
+  replicas: 1
+
+hpa:
+  minReplica: 1
+  maxreplica: 5
+  cpuUtilization: 50
+    
+ingress:
+  #  host: dbz.eks.daysofdevops.com
+  host: a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com
+  path: /
+  serviceName: dbzapp 
+  servicePort: 80

@@ -1,0 +1,40 @@
+prometheus:
+ serverFiles:
+  alerting_rules.yml:
+   groups:
+    - name: StatusError
+      rules:
+        - alert: AppDown
+          expr: probe_success == 0
+          for: 10s
+          labels:
+            severity: "critical"
+          annotations:
+            summary: "App is not showing a 200 response code"
+        - alert: Too many 4xx errors
+          expr: sum_over_time(nginx_http_response_count_total{status=~'4.*'}[1h]) > 5
+          labels:
+            severity: page
+          annotations:
+            summary: Too many 4xx Errors found in App for 1 hour
+        - alert: Too many 5xx errors
+          expr: sum_over_time(nginx_http_response_count_total{status=~'5.*'}[1h]) > 5
+          labels:
+            severity: page
+          annotations:
+            summary: Too many 4xx Errors found in App for 5 minutes
+ extraScrapeConfigs: |
+   - job_name: 'prometheus-blackbox-exporter'
+     metrics_path: /probe
+     params:
+       module: [http_2xx]
+     static_configs:
+       - targets:
+         - http://a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com/
+     relabel_configs:
+       - source_labels: [__address__]
+         target_label: __param_target
+       - source_labels: [__param_target]
+         target_label: instance
+       - target_label: __address__
+         replacement: {{ .Release.Name }}-prometheus-blackbox-exporter:9115
