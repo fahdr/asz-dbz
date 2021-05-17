@@ -1,5 +1,3 @@
-host:
- domain: a220d924eef9c4ac78f3db3f7d17b1fd-1566615617.us-west-2.elb.amazonaws.com
 
 # Alerting config
 prometheus:
