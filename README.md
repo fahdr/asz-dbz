@@ -101,7 +101,7 @@ terraform apply
 
 After showing you the resources to be created it will ask for confirmation. type yes to continue.
 
-This should install 58 resources in total.
+This should install 58 changes in total. (Not all are resources)
 
 Once completed you will be shown the result.
 
@@ -113,6 +113,70 @@ Run this command. change the region in the command if you have changed the regio
 aws eks --region us-west-2 update-kubeconfig --name sre_candidate
 ```
 
+#### Install Monitoring
+
+cd into the monitor folder
+
+```bash
+cd ../helm/monitor
+```
+#### Edit variables before installation
+
+Edit values.yaml file. You only need to change the domain name in the first line.
+
+```yaml
+host:
+ domain: http://a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com/
+```
+ #### This has to be changed in order for the blackbox exporter to probe external access. You can add the domain managed by route53 OR find the DNS name of the load balancer and add it here
+
+#### Add repos for helm
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+```
+#### Build dependency
+
+```bash
+helm dependency build
+```
+ #### Run the installation:
+
+ ```bash
+ helm install monitor .
+ ```
+* monitor is the name of the release and can be changed
+
+### Install the app
+
+cd into the app folder
+
+```bash
+cd ../dbzapp
+```
+
+#### Change variables
+
+Edit values.yaml file. You only need to change one. This is a good oppurtunity to change others, like hpa settings
+
+```yaml
+Ingress:
+  #host: dbz.eks.daysofdevops.com
+  # change this value to route53 configured domain or the dns name of load balancer
+  host: a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com
+```
+### Run the installation
+
+```bash
+helm install dbzapp
+```
+* monitor is the name of the release and can be changed
+
+If everything goes well you should have everything working
+
+#### End of installation
+
+### Prometheus dashboard
 
 
 
