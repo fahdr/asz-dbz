@@ -24,9 +24,95 @@ You need the following to install this setup. Instructions on how to install are
 - aws cli
 - kubectl client
 - helm
+- git
 - unix based machine (linux or mac)- terraform runs some scripts in shell during installation
 
-### Installation steps
+### Pre-requisites Installation steps
+
+#### Install aws cli
+[Download and insall AWS CLI](https://aws.amazon.com/cli/)
+
+Once installed configure aws cli to use your credential and to login
+
+```bash
+aws configure
+```
+Enter your access key. You can generate it from here [Get access key](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
+
+#### Install terraform
+[How to install terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+
+#### Install kubectl client
+[How to install kubectl](https://kubernetes.io/docs/tasks/tools/)
+
+#### Install helm
+[How to install helm](https://helm.sh/docs/intro/install/)
+
+#### Install git
+[How to install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+# Installation
+
+## Clone repository
+
+```bash
+git clone https://github.com/fahdr/asz-dbz.git
+```
+
+## Setup AWS Environment
+
+cd into the directory
+
+```bash
+cd asz-dbz/terraform
+```
+
+Initialize terraform. This retieves the providers listed
+
+```bash
+terraform init
+```
+#### Install the Environment. 
+
+Set the right variables
+Open terraform.tfvars in an editor and change these values. 
+The installation runs without having to change any values
+
+   - Set your domain name for ingress. You can leave this as it is if you dont have one:
+    ```bash
+    dns_base_domain = "eks.daysofdevops.com"
+    ```
+   - Set the instance types. 
+     ```bash
+     asg_instance_types  = ["t2.small", "t2.micro", "t2.nano"]
+     ```
+   - Set auto scaling values.
+     ```bash
+     autoscaling_minimum_size_by_az = 1  # Minimum number of instances. Will by multipled by number of availibilty zones during installation
+    autoscaling_maximum_size_by_az = 10 # Minimum number of instances. Will by multipled by number of availibilty zones during installation
+    autoscaling_average_cpu  = 30 # Threshold for autoscaling
+    ```
+
+Run the terraform installation
+
+```bash
+terraform apply
+```
+
+After showing you the resources to be created it will ask for confirmation. type yes to continue.
+
+This should install 58 resources in total.
+
+Once completed you will be shown the result.
+
+#### configure kubectl to point to your cluster
+
+Run this command. change the region in the command if you have changed the region during installation
+
+```bash
+aws eks --region us-west-2 update-kubeconfig --name sre_candidate
+```
+
 
 
 

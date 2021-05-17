@@ -3,10 +3,7 @@ variable "cluster_name" {
   type        = string
   description = "EKS cluster name."
 }
-variable "iac_environment_tag" {
-  type        = string
-  description = "AWS tag to indicate environment name of each infrastructure object."
-}
+
 variable "name_prefix" {
   type        = string
   description = "Prefix to be used on each infrastructure object Name created in AWS."
