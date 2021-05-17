@@ -122,11 +122,12 @@ cd ../helm/monitor
 ```
 #### Edit variables before installation
 
-Edit values.yaml file. You only need to change the domain name in the first line.
+Edit values.yaml file. You only need to change the domain name in the extra scrapeConfig section.
 
 ```yaml
-host:
- domain: http://a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com/
+static_configs:
+       - targets:
+         - a220d924eef9c4ac78f3db3f7d17b1fd-1566615617.us-west-2.elb.amazonaws.com
 ```
  #### This has to be changed in order for the blackbox exporter to probe external access. You can add the domain managed by route53 OR find the DNS name of the load balancer and add it here
 
