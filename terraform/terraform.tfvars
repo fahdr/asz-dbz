@@ -1,14 +1,12 @@
 #Network vars
-cluster_name            = "sre_candidate"
-iac_environment_tag     = "development"
+cluster_name            = "sre_candidate" # name of the cluster
 name_prefix             = "dbz"
 main_network_block      = "10.0.0.0/16"
 subnet_prefix_extension = 4
 zone_offset             = 8
 
 #eks vars
-admin_users                              = ["testuser"]
-developer_users                          = ["melissa-oliver", "lex-oneil"]
+
 asg_instance_types                       = ["t2.small", "t2.micro", "t2.nano"]
 autoscaling_minimum_size_by_az           = 1
 autoscaling_maximum_size_by_az           = 10
@@ -34,9 +32,5 @@ ingress_gateway_annotations = {
   "prometheus.port" = "9113"
 }
 
-#subdomain vars
-deployments_subdomains = ["dbz"] # to be prefixed before dns_base_domain (e.g. sample.eks.singh.cl or api.eks.singh.cl), and handled by Ingress rules defined by each Application Helm Chart
 
 
-#namespace vars
-namespaces = ["dbz"]

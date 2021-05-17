@@ -5,7 +5,7 @@ metadata:
 data:
   config.hcl: |
     listen {
-      port = 4040
+      port = {{ .Values.container.logport }}
     }
 
      namespace "nginx" {

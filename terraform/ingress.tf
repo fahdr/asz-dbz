@@ -18,13 +18,7 @@ resource "aws_acm_certificate" "eks_domain_cert" {
     sre_candidate = "fahdrahman"
   }
 }
-#resource "aws_route53_record" "eks_domain_cert_validation_dns" {
-  #name    = aws_acm_certificate.eks_domain_cert.domain_validation_options.0.resource_record_name
-  #type    = aws_acm_certificate.eks_domain_cert.domain_validation_options.0.resource_record_type
-  #zone_id = data.aws_route53_zone.base_domain.id
-  #records = [aws_acm_certificate.eks_domain_cert.domain_validation_options.0.resource_record_value]
-  #ttl     = 60
-#}
+
 resource "aws_route53_record" "eks_domain_cert_validation_dns" {
   for_each = {
     for dvo in aws_acm_certificate.eks_domain_cert.domain_validation_options : dvo.domain_name => {
@@ -43,8 +37,8 @@ resource "aws_route53_record" "eks_domain_cert_validation_dns" {
 }
 resource "aws_acm_certificate_validation" "eks_domain_cert_validation" {
   certificate_arn         = aws_acm_certificate.eks_domain_cert.arn
-  #validation_record_fqdns = [aws_route53_record.eks_domain_cert_validation_dns.fqdn]
-    validation_record_fqdns = [for record in aws_route53_record.eks_domain_cert_validation_dns : record.fqdn]
+ 
+  validation_record_fqdns = [for record in aws_route53_record.eks_domain_cert_validation_dns : record.fqdn]
 
 }
 
@@ -69,28 +63,6 @@ resource "helm_release" "ingress_gateway" {
    value = aws_acm_certificate.eks_domain_cert.id
  }
 }
-# resource "helm_release" "ingress_gateway" {
-#   name       = "ingress"
-#   chart      = "aws-alb-ingress-controller"
-#   repository = "http://storage.googleapis.com/kubernetes-charts-incubator"
-#   version    = "1.0.2"
-
-#   set {
-#     name  = "autoDiscoverAwsRegion"
-#     value = "true"
-#   }
-#   set {
-#     name  = "autoDiscoverAwsVpcID"
-#     value = "true"
-#   }
-#   set {
-#     name  = "clusterName"
-#     value = "${var.cluster_name}"
-#   }
-# }
-
-
-
 
 # create base domain for EKS Cluster
 data "kubernetes_service" "ingress_gateway" {

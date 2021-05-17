@@ -1,3 +1,7 @@
+host:
+ domain: http://a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com/
+
+# Alerting config
 prometheus:
  serverFiles:
   alerting_rules.yml:
@@ -12,17 +16,19 @@ prometheus:
           annotations:
             summary: "App is not showing a 200 response code"
         - alert: Too many 4xx errors
-          expr: sum_over_time(nginx_http_response_count_total{status=~'4.*'}[1h]) > 5
+          expr: sum_over_time(nginx_http_response_count_total{status=~'4.*'}[1h]) > 100
           labels:
             severity: page
           annotations:
             summary: Too many 4xx Errors found in App for 1 hour
         - alert: Too many 5xx errors
-          expr: sum_over_time(nginx_http_response_count_total{status=~'5.*'}[1h]) > 5
+          expr: sum_over_time(nginx_http_response_count_total{status=~'5.*'}[5m]) > 50
           labels:
             severity: page
           annotations:
             summary: Too many 4xx Errors found in App for 5 minutes
+
+# Config for prometheus to probe our domain name through blackbox exporter
  extraScrapeConfigs: |
    - job_name: 'prometheus-blackbox-exporter'
      metrics_path: /probe
@@ -30,7 +36,7 @@ prometheus:
        module: [http_2xx]
      static_configs:
        - targets:
-         - http://a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com/
+         - {{ Values.host.domain }}
      relabel_configs:
        - source_labels: [__address__]
          target_label: __param_target

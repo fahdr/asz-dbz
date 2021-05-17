@@ -37,10 +37,6 @@ module "vpc" {
     cidrsubnet(var.main_network_block, var.subnet_prefix_extension, tonumber(substr(zone_id, length(zone_id) - 1, 1)) + var.zone_offset - 1)
   ]
 
-  # enable single NAT Gateway to save some money
-  # WARNING: this could create a single point of failure, since we are creating a NAT Gateway in one AZ only
-  # feel free to change these options if you need to ensure full Availability without the need of running 'terraform apply'
-  # reference: https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/2.44.0#nat-gateway-scenarios
   enable_nat_gateway     = true
   single_nat_gateway     = true
   one_nat_gateway_per_az = false

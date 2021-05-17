@@ -1,19 +1,20 @@
 ---
 container:
-  image: "fahdr/dbz-app"
-  tag: "latest"
-  port: 80
-  logport: 4040
-  replicas: 1
+  image: "fahdr/dbz-app" # image name for the pod
+  tag: "latest" # version of the image
+  port: 80 # port at which the application is serving
+  logport: 4040 # port at which the logger exposes /metrics.
+  replicas: 1 # default number of replicas for deployment
 
 hpa:
-  minReplica: 1
-  maxreplica: 5
-  cpuUtilization: 50
+  minReplica: 1 # minimum number of replicas to be maintained by Horizontal pod autoscaler
+  maxreplica: 5 # maximum number of replicas allowed to autoscale to
+  cpuUtilization: 50 #average cpu utilization beyond which the pods should scale
     
 ingress:
-  #  host: dbz.eks.daysofdevops.com
-  host: a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com
-  path: /
-  serviceName: dbzapp 
-  servicePort: 80
+  #host: dbz.eks.daysofdevops.com
+  # change this value to route53 configured domain or the dns name of load balancer
+  host: a592f88102ee54c31b8543c7234c1e7f-1829126277.us-west-2.elb.amazonaws.com 
+  path: / # path where the application is hosting 
+  serviceName: dbzapp #name of the service this should proxy to
+  servicePort: 80 # port at which the service is exposed

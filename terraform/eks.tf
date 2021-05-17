@@ -1,21 +1,5 @@
-# render Admin & Developer users list with the structure required by EKS module
 locals {
-  admin_user_map_users = [
-    for admin_user in var.admin_users :
-    {
-      userarn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${admin_user}"
-      username = admin_user
-      groups   = ["system:masters"]
-    }
-  ]
-  developer_user_map_users = [
-    for developer_user in var.developer_users :
-    {
-      userarn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${developer_user}"
-      username = developer_user
-      groups   = ["${var.name_prefix}-developers"]
-    }
-  ]
+ 
   worker_groups_launch_template = [
     {
       instance_type           = "t2.small"
@@ -47,8 +31,8 @@ module "eks-cluster" {
 
   worker_groups_launch_template = local.worker_groups_launch_template
 
-  # map developer & admin ARNs as kubernetes Users
-  map_users = concat(local.admin_user_map_users, local.developer_user_map_users)
+
+  
 
    tags = {
     "sre_candidate"  = "fahdrahman"
@@ -91,7 +75,7 @@ resource "helm_release" "spot_termination_handler" {
   namespace  = var.spot_termination_handler_chart_namespace
 }
 
-# add spot fleet Autoscaling policy
+# add Autoscaling policy
 resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
   count = length(local.worker_groups_launch_template)
 

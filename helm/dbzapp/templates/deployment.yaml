@@ -12,7 +12,7 @@ spec:
     metadata:
       annotations:
        prometheus.io/scrape: "true"
-       prometheus.io/port: "4040"
+       prometheus.io/port: {{ .Values.container.logport }}
       labels:
         app: {{ .Chart.Name }}
     spec:

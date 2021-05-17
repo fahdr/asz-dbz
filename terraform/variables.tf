@@ -25,14 +25,6 @@ variable "zone_offset" {
 }
 
 #eks variables
-variable "admin_users" {
-  type        = list(string)
-  description = "List of Kubernetes admins."
-}
-variable "developer_users" {
-  type        = list(string)
-  description = "List of Kubernetes developers."
-}
 variable "asg_instance_types" {
   type        = list(string)
   description = "List of EC2 instance machine types to be used in EKS."
@@ -90,14 +82,3 @@ variable "ingress_gateway_annotations" {
 }
 
 
-# subdomain variables
-variable "deployments_subdomains" {
-  type        = list(string)
-  description = "List of subdomains to be routed to Kubernetes Services."
-}
-
-# namespace variables
-variable "namespaces" {
-  type        = list(string)
-  description = "List of namespaces to be created in our EKS Cluster."
-}
