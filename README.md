@@ -178,6 +178,20 @@ If everything goes well you should have everything working
 
 ### Prometheus dashboard
 
+```bash
+kubectl port-forward svc/monitor-prometheus-server 9090:80
+```
+You can now view the dashboard in your browser using localhost port 9090
+[http://localhost:9090](http://localhost:9090)
+
+#### Alerting
+
+You can see that there are 3 alerts in the Alerts menu of the dashboard
+
+- If more than 100 4xx status_code is recieved in 1 hour
+- If more than 50 5xx status_code is recieved in 5 hour
+- if check.txt check fails
+
 
 
 ### Details of Installation
