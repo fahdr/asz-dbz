@@ -8,7 +8,7 @@ The code in this repository consists of terraform code, helm charts and a docker
 Features:
  - EKS
  - Cluster Autoscaling
- - Mixed instance group with multiple istance types (t2.small,t2.medium) with ondemand and spot instances
+ - Mixed instance group with multiple instance types (t2.small,t2.medium) with ondemand and spot instances
  - Horizontal Pod Autoscaling
  - Network Load balancer
  - Application Load balancer
@@ -30,7 +30,7 @@ You need the following to install this setup. Instructions on how to install are
 ### Pre-requisites Installation steps
 
 #### Install aws cli
-[Download and insall AWS CLI](https://aws.amazon.com/cli/)
+[Download and install AWS CLI](https://aws.amazon.com/cli/)
 
 Once installed configure aws cli to use your credential and to login
 
@@ -67,7 +67,7 @@ cd into the directory
 cd asz-dbz/terraform
 ```
 
-Initialize terraform. This retieves the providers listed
+Initialize terraform. This retrieves the providers listed
 
 ```bash
 terraform init
@@ -88,8 +88,8 @@ The installation runs without having to change any values
      ```
    - Set auto scaling values.
      ```bash
-     autoscaling_minimum_size_by_az = 1  # Minimum number of instances. Will by multipled by number of availibilty zones during installation
-    autoscaling_maximum_size_by_az = 10 # Minimum number of instances. Will by multipled by number of availibilty zones during installation
+     autoscaling_minimum_size_by_az = 1  # Minimum number of instances. Will by multiplied by number of availabilty zones during installation
+    autoscaling_maximum_size_by_az = 10 # Minimum number of instances. Will by multiplied by number of availibalty zones during installation
     autoscaling_average_cpu  = 30 # Threshold for autoscaling
     ```
 
@@ -158,7 +158,7 @@ cd ../dbzapp
 
 #### Change variables
 
-Edit values.yaml file. You only need to change one. This is a good oppurtunity to change others, like hpa settings
+Edit values.yaml file. You only need to change one. This is a good opportunity to change others, like hpa settings
 
 ```yaml
 Ingress:
@@ -189,8 +189,8 @@ You can now view the dashboard in your browser using localhost port 9090
 
 You can see that there are 3 alerts in the Alerts menu of the dashboard
 
-- If more than 100 4xx status_code is recieved in 1 hour
-- If more than 50 5xx status_code is recieved in 5 hour
+- If more than 100 4xx status_code is received in 1 hour
+- If more than 50 5xx status_code is received in 5 hour
 - if check.txt check fails
 
 
@@ -201,27 +201,27 @@ You can see that there are 3 alerts in the Alerts menu of the dashboard
 
 1. ##### VPC (Network) - 
 Using a vpc makes things more cleaner for this demo. Destroys everything once complete
- - Private subnets - No of subnets depend on Availabilty zones. The script looks for zones and creates a list per zone
- - Public subnets - No of subnets depend on Availabilty zones. The script looks for zones and creates a list per zone
+ - Private subnets - No of subnets depend on Availability zones. The script looks for zones and creates a list per zone
+ - Public subnets - No of subnets depend on Availability zones. The script looks for zones and creates a list per zone
  - NAT gateway - Only one as more are not needed for this demo. This could create a single point of failure in production, since we are creating a NAT Gateway in one AZ only.
  
 2. ##### EKS cluster - 
 EKS cluster with Autoscaling using Kuberentes v1.19 along with cluster CA certificates
- - Launch template - Creates instace times the availability zone. EKS needs atleast two availability zones. The launch template can used mixed instance and can request spot instace when the base on-demand threshold is reached.The decision is based on pricing. 
+ - Launch template - Creates instace times the availability zone. EKS needs atleast two availability zones. The launch template can used mixed instance and can request spot instance when the base on-demand threshold is reached. The decision is based on pricing. 
  - Autoscaling policy - The cluster auto scales when Average Cpu utilization meets the definable value
- - Spot termiation handler - Ensures control plane responds correctly when instance goes down
+ - Spot termination handler - Ensures control plane responds correctly when instance goes down
 
  3. ##### Ingress - 
  Creates a ELB on aws and ALB using nginx. Though we have better ways of handling load balancer on aws in recent days. AWS Load balancer can now handle both Layer 7 and layer 4, there is still enough benifits using AWS ELB- NGINX ALB
  [Why nginx](https://www.nginx.com/blog/aws-alb-vs-nginx-plus/) 
 
   - Route53 Zone - Creates a hosted zone with the domain provided. Initial plan was to read value from an already present zone and use for ingress, but in the spirit of automation decided to create the zone.
-  ###### This requires a domain managed by AWS route53. You can do this by either pointing your domain to the route53 aname serversor registering domain on route53 itself [How to manage your domain using AWS](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html)
+  ###### This requires a domain managed by AWS route53. You can do this by either pointing your domain to the route53 name servers or registering domain on route53 itself [How to manage your domain using AWS](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html)
   ##### PRO TIP: We can use the default DNS name provided in terraform.tfvars for our purposes
 
   - AWS ACM Certificate - SSL certificate to handle tls termination at the load balancer
   - Certificate Validation - The certificate issuing authority needs to validate your ownership for the domain. If route53 is managing your domain, then a CNAME record is added to the records. If your domain is not managed by AWS then you wiil have to add this manually. 
-  [How to avalidate certificate](https://aws.amazon.com/blogs/security/easier-certificate-validation-using-dns-with-aws-certificate-manager/)
+  [How to validate certificate](https://aws.amazon.com/blogs/security/easier-certificate-validation-using-dns-with-aws-certificate-manager/)
   ###### Deployment will fail if certificate is not validated
   ###### PRO TIP: The domain eks.daysofdevops.com is validated and can be used in the variables section for smooth deployment
 
@@ -262,8 +262,8 @@ EKS cluster with Autoscaling using Kuberentes v1.19 along with cluster CA certif
         - Sends all incoming traffic to the backend
         - Defines backend to route traffic to application service
         - Defines host which is the domain name it should listen to.
-        ##### This shoud be the domain name configured with route53. If the domain name isnot configured no traffic will pass through
-        ##### PRO TIP: You can use the default aws domain name (DNS Name) given to the load balancer found in AWS console if you dont have a vaild domain
+        ##### This should be the domain name configured with route53. If the domain name is not configured no traffic will pass through
+        ##### PRO TIP: You can use the default aws domain name (DNS Name) given to the load balancer found in AWS console if you dont have a valid domain
  
     * values.yaml - values file with default values for the installation
         Detailed comments are provided for each value within the values.yaml file
