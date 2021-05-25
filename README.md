@@ -1,7 +1,6 @@
 ## Info
 App name: dbzapp
 
-### For SRE candidate
 
 ### Description:
 The code in this repository consists of terraform code, helm charts and a docker file. 
